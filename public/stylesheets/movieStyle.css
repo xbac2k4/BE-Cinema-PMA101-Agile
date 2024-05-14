@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    padding: 20px;
+}
+
+main>.nav {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 10px 0;
+}
+
+main>.nav>.bgr {
+    width: 100%;
+    height: 100%;
+    padding: 20px 40px;
+    background-color: #e6e6e6;
+}
+
+main>.nav>.bgr>.input-search {
+    width: 250px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: white;
+    align-items: center;
+    position: relative;
+}
+
+main>.nav>.bgr>.input-search>input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    padding-left: 40px;
+    padding-right: 10px;
+}
+
+main>.nav>.bgr>.input-search>input:focus {
+    outline: none;
+}
+
+main>.nav>.bgr>.input-search>i {
+    position: absolute;
+    left: 0;
+    padding: 15px;
+}
+
+i:hover {
+    cursor: pointer;
+}
+
+main>.nav>button {
+    border: none;
+}
+
+#preloader {
+    background: rgba(0, 0, 0, 0) url('https://2.bp.blogspot.com/-mi47tJm0jZ8/VjtDUEcPRxI/AAAAAAAAiEA/lbnR-JT87GQ/s1600/preloader%2B%25281%2529.gif') no-repeat center center;
+    background-size: 10%;
+    width: 67%;
+    height: 70vh;
+    position: fixed;
+    z-index: 100;
+    border: none;
+}
+
+.page {
+    width: 67%;
+    border: none;
+    padding: 0;
+    justify-content: center;
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 40px;
+}
+
+.btn-group {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.active {
+    background-color: blue;
+    /* hoặc bất kỳ kiểu thiết lập trạng thái active nào khác */
+    color: white;
+}

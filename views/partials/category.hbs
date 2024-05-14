@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/ce1d36bb05.js" crossorigin="anonymous"></script>
+    <title>Category</title>
+    <style>
+        main div {
+            padding: 10px;
+            border-top: 1px solid gray;
+            border-bottom: 1px solid gray;
+        }
+
+        #preloader {
+            background: rgba(0, 0, 0, 0) url('https://2.bp.blogspot.com/-mi47tJm0jZ8/VjtDUEcPRxI/AAAAAAAAiEA/lbnR-JT87GQ/s1600/preloader%2B%25281%2529.gif') no-repeat center center;
+            background-size: 10%;
+            width: 67%;
+            height: 70vh;
+            position: fixed;
+            z-index: 100;
+            border: none;
+        }
+
+        .page {
+            width: 67%;
+            border: none;
+            padding: 0;
+            justify-content: center;
+            display: flex;
+            position: absolute;
+            bottom: 0;
+            margin-bottom: 40px;
+        }
+
+        .btn-group {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .active {
+            background-color: blue;
+            /* hoặc bất kỳ kiểu thiết lập trạng thái active nào khác */
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div style="border: none; margin: 0;">
+            <h1 class="text-center">DANH SÁCH THỂ LOẠI</h1>
+            <div class="d-flex justify-content-end">
+                <button onclick="BtnThem()" type="button" class="btn btn-success">Tạo thể loại
+                    mới</button>
+            </div>
+            <table border="0" class="table table-striped-columns table-striped">
+                <thead class="">
+                    <tr>
+                        <th>ID</th>
+                        <th>Hình ảnh</th>
+                        <th>Tên thể loại</th>
+                    </tr>
+                </thead>
+                <div id="preloader"></div>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="page">
+            <div id="page" class="btn-group me-2" role="group" aria-label="First group"></div>
+        </div>
+    </main>
+    <script src="javascripts/category.js"></script>
+</body>
+
+</html>
