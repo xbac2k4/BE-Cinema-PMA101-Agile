@@ -2,20 +2,7 @@ const Movie = require("../models/Movie");
 
 class MovieController {
     getAllMovie = async (req, res) => {
-        const authHeader = req.headers['authorization'];
-        console.log(authHeader);
-        if (!authHeader) {
-            return res.sendStatus(401); // Kiểm tra xem header Authorization có tồn tại không
-        }
-
-        const token = authHeader.split(' ')[1];
-
-        if (!token) {
-            return res.render('login', { title: 'LOGIN' }) // Kiểm tra xem token có tồn tại không
-        }
         try {
-            const payload = JWT.verify(token, SECRETKEY); // Xác thực token
-            console.log(payload);
             const data = await Movie.find().populate('id_category');
             // console.log('data: ', data);
             res.json({
@@ -27,7 +14,7 @@ class MovieController {
             console.log(error);
         }
     }
-    getMovieByPage = async (req, res) => {
+    getMovieByPage = async (req, res, next) => {
         const { page, limit } = req.query;
         try {
             // const data = await Category.find().populate();

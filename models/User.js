@@ -6,7 +6,7 @@ const User = new Scheme({
     password: { type: String, maxLeght: 255 },
     email: { type: String, unique: true },
     avatar: { type: String },
-    sex: { type: Number, unique: true },
+    sex: { type: Number},
     phoneNumber: { type: String, unique: true },
     roles: { type: Number, default: 1 },
 }, {

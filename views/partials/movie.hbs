@@ -18,7 +18,8 @@
                     <input type="search" placeholder="Search..." name="" id="">
                     <i class="bi bi-search"></i>
                 </div>
-                <button onclick="BtnThem()" type="button">Thêm phim mới</button>
+                <button onclick="alert('Chức năng đang phát triển')" type="button"><i class="bi bi-plus-circle"></i>Thêm
+                    phim mới</button>
             </div>
         </div>
         <table border="0" class="table table-striped-columns table-striped">
@@ -37,7 +38,13 @@
             <tbody></tbody>
         </table>
         <div class="page">
-            <div id="page" class="btn-group me-2" role="group" aria-label="First group"></div>
+            <i class="bi bi-caret-left-square" id="ic-giam"></i>
+            <input type="text" name="page-number" id="page-number">
+            <i class="bi bi-caret-right-square" id="ic-tang"></i>
+        </div>
+        <div class="bgr-dialog-chitiet" id="bgr-dialog-chitiet">
+            <div class="close-dialog" onclick="closeDialogChiTiet()"></div>
+            <div class="dialog-chitiet" id="dialog-chitiet" open></div>
         </div>
     </main>
     <script src="javascripts/movie.js"></script>
