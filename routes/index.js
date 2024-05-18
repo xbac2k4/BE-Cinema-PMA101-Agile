@@ -53,6 +53,10 @@ router.get("/showtimes", function(req, res, next) {
   const content = renderPartial('showtimes');
   res.render('main', { 
       title: 'ShowTimes',
+router.get("/user", function(req, res, next) {
+  const content = renderPartial('user');
+  res.render('main', { 
+      title: 'User',
       body: content,
   });
 });
