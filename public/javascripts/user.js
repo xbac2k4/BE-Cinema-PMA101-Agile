@@ -25,7 +25,7 @@ const fetchAPI_Page = (currentPage) => {
                     overflow: hidden;
                     text-overflow: ellipsis;">${items._id}</p></td>
                     <td>
-                        <img style="width:50px;height:50px,object-fit:cover" src="${items.avatar}"/>
+                        <img style="width:30px;height:30px,object-fit:cover" src="${items.avatar}"/>
                     </td>
                     
                     <td>${items.username}</td>

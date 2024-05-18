@@ -3,7 +3,12 @@ const url = 'http://localhost:3000/api/v1/category'
 let tbody = document.querySelector('tbody')
 let page = document.getElementById('page')
 let preloader = document.getElementById('preloader')
+let pageNumber = document.getElementById('page-number')
+let tang = document.getElementById('ic-tang')
+let giam = document.getElementById('ic-giam')
+
 let numberPage = 1;
+let totalPages;
 //
 // const fetchAPI = () => {
 //     fetch(`${url}/get-category`)
@@ -49,22 +54,17 @@ const fetchAPI_Page = (currentPage) => {
             console.log(data.data.totalPages);
             let html = data.data.categories.map(items => {
                 return /*html*/` 
-                <tr height="80px">
+                <tr>
                     <td style="color: red;">${items._id}</td>
-                   
                     <td>${items.name}</td>
                     <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end"><i onclick="BtnChiTiet()" class="bi bi-eye"></i> <i class="bi bi-pen"></i> <i class="bi bi-trash3"></i></td>
                 </tr>
             `;
             }).join('');
-            // let htmlPage = data.data.totalPages;
-            let htmlPage = [...Array(data.data.totalPages).keys()].map(page => {
-                return /*html*/`<button type="button" class="btn btn-outline-secondary ${page + 1 === currentPage ? 'active' : ''}" onclick="BtnPage(${page + 1})">${page + 1}</button>
-                `;
-            })
             preloader.style.display = 'none';
             tbody.innerHTML = html;
-            page.innerHTML = htmlPage;
+            pageNumber.value = numberPage;
+            totalPages = data.data.totalPages;
         })
         .catch(error => {
             console.error('There was a itemsblem with the fetch operation:', error);
@@ -102,6 +102,17 @@ const BtnThem = () => {
     window.location.href = '/add-category'
 }
 
-const BtnPage = (page) => {
-    fetchAPI_Page(page);
-}
+tang.addEventListener('click', event => {
+    event.preventDefault();
+    if (numberPage < totalPages) {
+        numberPage++;
+        fetchAPI_Page(numberPage);
+    }
+});
+giam.addEventListener('click', event => {
+    event.preventDefault();
+    if (numberPage > 0) {
+        numberPage--;
+        fetchAPI_Page(numberPage);
+    }
+});
