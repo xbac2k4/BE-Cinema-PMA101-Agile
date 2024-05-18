@@ -11,25 +11,25 @@
 
 <body>
     <main>
-        <h1 class="title text-center">LỊCH CHIẾU PHIM</h1>
+        <h1 class="title text-center">DANH SÁCH USER</h1>
         <div class="nav">
             <div class="bgr d-flex flex-row justify-content-between">
                 <div class="input-search d-flex flex-row justify-content-between">
                     <input type="search" placeholder="Search..." name="" id="">
                     <i class="bi bi-search"></i>
                 </div>
-                <button onclick="BtnThem()" type="button"><i class="bi bi-plus-circle"></i>Thêm lịch chiếu mới</button>
+                <button onclick="BtnThem()" type="button"><i class="bi bi-plus-circle"></i>Thêm người dùng mới</button>
             </div>
         </div>
         <table border="0" class="table table-striped-columns table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Phòng chiếu</th>
-                    <th>Giờ chiếu</th>
-                    <th>Ngày chiếu</th>
-                    <th>Phim</th>
-                    
+                    <th>Avatar</th>
+                    <th>Tên</th>
+                    <th>Giới tính</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
                 </tr>
             </thead>
             <div id="preloader"></div>
@@ -39,6 +39,7 @@
             <div id="page" class="btn-group me-2" role="group" aria-label="First group"></div>
         </div>
     </main>
-    <script src="javascripts/movie.js"></script>
+    <script src="javascripts/user.js"></script>
 </body>
+
 </html>
