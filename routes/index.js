@@ -49,4 +49,11 @@ router.get("/movie", function(req, res, next) {
       body: content,
   });
 });
+router.get("/showtimes", function(req, res, next) {
+  const content = renderPartial('showtimes');
+  res.render('main', { 
+      title: 'ShowTimes',
+      body: content,
+  });
+});
 module.exports = router;
