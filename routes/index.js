@@ -20,6 +20,7 @@ const renderPartial = (partialName) => {
 const categoryRouter = require('./category/index');
 const movieRouter = require('./movie/index');
 const userRouter = require('./user/index');
+const showtimesRouter = require('./showtimes/index');
 const authenticateToken = require('../middlewares/auth');
 
 //
@@ -28,6 +29,8 @@ const router = express.Router();
 router.use("/api/v1/user", userRouter);
 router.use("/api/v1/category", categoryRouter);
 router.use("/api/v1/movie", movieRouter);
+router.use("/api/v1/showtimes", showtimesRouter);
+
 
 router.get("/", function(req, res, next) {
   res.render('login', { title: 'LOGIN' })

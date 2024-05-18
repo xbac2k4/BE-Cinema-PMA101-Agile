@@ -1,10 +1,10 @@
-const url = 'http://localhost:3000/api/v1/user'
+const url = 'http://localhost:3000/api/v1/showtimes'
 
 let tbody = document.querySelector('tbody')
 let page = document.getElementById('page')
+let preloader = document.getElementById('preloader')
 let dialog = document.getElementById('bgr-dialog-chitiet')
 let dialogbody = document.getElementById('dialog-chitiet')
-let preloader = document.getElementById('preloader')
 let pageNumber = document.getElementById('page-number')
 let tang = document.getElementById('ic-tang')
 let giam = document.getElementById('ic-giam')
@@ -12,11 +12,8 @@ let giam = document.getElementById('ic-giam')
 let numberPage = 1;
 let totalPages;
 
-console.log(dialog);      // Should not be null
-console.log(dialogbody);  // Should not be null
-
 const fetchAPI_Page = (currentPage) => {
-    fetch(`${url}/get-user-by-page?page=${currentPage}&limit=5`)
+    fetch(`${url}/get-showtimes-by-page?page=${currentPage}&limit=5`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -24,27 +21,29 @@ const fetchAPI_Page = (currentPage) => {
             return response.json(); // Đọc nội dung của phản hồi
         })
         .then(data => {
-            // console.log("data ok: " + data.data.users);
-            let html = data.data.users.map(items => {
+            // console.log("data ok: " + data.data.movies);
+            let html = data.data.showtime.map(items => {
+                console.log(items);
                 return /*html*/` 
                 <tr>
-                    <td>
-                        <p style="
+                    <td><p style="
+                    width: 50px;
+                    color: red;   
+                    white-space: nowrap; 
+                    overflow: hidden;
+                    text-overflow: ellipsis;">${items._id}</p></td>
+                    <td>${items.id_room.roomName}</td>
+                    <td>${items.id_time.timeName}</td>
+                    <td>${items.date}</td>
+                    <td><p style="
                             width: 70px;
                             color: red;   
                             white-space: nowrap; 
                             overflow: hidden;
-                            text-overflow: ellipsis;">${items._id}</p>
+                            text-overflow: ellipsis;">${items.id_movie.name}</p>
                     </td>
-                    <td>
-                        <img style="width:30px;height:30px,object-fit:cover" src="${items.avatar}"/>
-                    </td>               
-                    <td>${items.username}</td>
-                    <td>${items.sex = 0 ? 'Nam' : 'Nữ'}</td>
-                    <td>${items.email}</td>
-                    <td>${items.phoneNumber}</td>
                     <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end">
-                        <i onclick="BtnChiTiet('${items._id}','${items.avatar}','${items.username}','${items.sex = 0 ? 'Nam' : 'Nữ'}','${items.email}','${items.phoneNumber}')" class="bi bi-eye"></i> 
+                        <i onclick="BtnChiTiet('${items._id}', '${items.date}', '${items.id_room.roomName}', '${items.id_time.timeName}', '${items.id_movie._id}', '${items.id_movie.name}')" class="bi bi-eye"></i> 
                         <i class="bi bi-pen"></i> 
                         <i class="bi bi-trash3"></i>
                     </td>
@@ -52,19 +51,25 @@ const fetchAPI_Page = (currentPage) => {
             `;
             }).join('');
             // let htmlPage = data.data.totalPages;
+            // let htmlPage = [...Array(data.data.totalPages).keys()].map(page => {
+            //     return /*html*/` 
+            //     <button type="button" class="btn btn-outline-secondary ${page + 1 === currentPage ? 'active' : ''}" onclick="BtnPage(${page + 1})">${page + 1}</button>
+            // `;
+            // })
             preloader.style.display = 'none';
             tbody.innerHTML = html;
             pageNumber.value = numberPage;
             totalPages = data.data.totalPages;
+            // page.innerHTML = htmlPage;
         })
         .catch(error => {
             console.error('There was a itemsblem with the fetch operation:', error);
         });
 }
-
+{/* <button onclick="BtnXoa('${items._id}')" class="btn btn-outline-danger">Chi tiết</button> <button class="btn btn-outline-info" onclick="BtnSua('${items._id}','${items.image}','${items.name}')">Sửa</button> <button onclick="BtnXoa('${items._id}')" class="btn btn-outline-danger">Xóa</button> */ }
 fetchAPI_Page(numberPage);
 
-const BtnChiTiet = (_id,avatar,username,sex,email,phoneNumber) => {
+const BtnChiTiet = (id_showtimes, date, room, time, id_movie, movie_name) => {
     // alert(`Chức năng đang được phát triển ${name}`);
     dialog.style.display = 'flex';
     let html = /*html*/` 
@@ -73,60 +78,57 @@ const BtnChiTiet = (_id,avatar,username,sex,email,phoneNumber) => {
             height:100%;
         ">
             <div class="bgr-dialog-chitiet-content-title text-center">
-                <h2>THÔNG TIN NGƯỜI DÙNG</h2>
+                <h2>THÔNG TIN LỊCH CHIẾU</h2>
+            </div>
+            <div class="bgr-dialog-chitiet-content-body-movie d-flex justify-content-end">
+                <p  style="
+                    background-color: white;
+                    color: red;
+                    margin: 0;
+                    padding: 0 20px;
+                    font-weight: bold;
+                    font-size: 20px;
+                    " >${date}
+                </p>
             </div>
             <div class="bgr-dialog-chitiet-content-body">
-                <div class="bgr-dialog-chitiet-content-body-image d-flex flex-row justify-content-center" style="
-                    width:100%;
-                    margin: 20px;
-                ">
-                    <img width="150px" height="200px" 
-                        style="
-                            object-fit: cover;
-                            align-self: center;
-                            border-radius: 10px;
-                        " src="${avatar}" alt="">
-                </div>
                 <div class="bgr-dialog-chitiet-content-body-category">
                     <p  style="
                         background-color: white;
                         margin: 0;
                         padding: 0 20px;
                         font-weight: bold;
-                        " >ID người dùng: ${_id}
+                        " >ID lịch chiếu: ${id_showtimes}
                     </p>
-                    <div class="d-flex justify-content-between">
-                    <p  style="
-                        background-color: white;
-                        margin: 0;
-                        padding: 0px 40px;
-                        " >Tên người dùng: ${username}
-                    </p>
+                    <div style="padding: 0 40px" class="d-flex justify-content-between">
+                        <p style="
+                            background-color: white;
+                            margin: 0;
+                            " >Phòng chiếu: ${room}
+                        </p>
                         <p  style="
                             background-color: white;
                             margin: 0;
-                            padding-right:100px;
-                            " >Giới tính: ${sex }
+                            " >Giờ chiếu: ${time}
                         </p>
-                        
                     </div>
-                    <p  style="
-                        background-color: white;
-                        margin: 0;
-                        padding: 0px 40px;
-                        " >Email: ${email}
-                    </p>
-                    <p  style="
-                        background-color: white;
-                        margin: 0;
-                        padding: 0px 40px;
-                        " >Số điện thoại: ${phoneNumber}
-                    </p>
-                    
                 </div>
-                
+                <div class="bgr-dialog-chitiet-content-body-movie">
+                    <p  style="
+                        background-color: white;
+                        margin: 0;
+                        padding: 0 20px;
+                        font-weight: bold;
+                        " >ID phim: ${id_movie}
+                    </p>
+                    <p  style="
+                        background-color: white;
+                        margin: 0;
+                        padding: 0px 40px;
+                        " >Tên phim: ${movie_name}
+                    </p>
+                </div>
             </div>
-            
             <div class="bgr-dialog-chitiet-content-button text-center">
                 <button style="
                     width: 30%;
