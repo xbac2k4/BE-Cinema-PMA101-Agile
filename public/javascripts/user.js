@@ -40,7 +40,7 @@ const fetchAPI_Page = (currentPage) => {
                         <img style="width:30px;height:30px,object-fit:cover" src="${items.avatar}"/>
                     </td>               
                     <td>${items.username}</td>
-                    <td>${items.sex=0?'Nam': 'Nữ'}</td>
+                    <td>${items.sex = 0 ? 'Nam' : 'Nữ'}</td>
                     <td>${items.email}</td>
                     <td>${items.phoneNumber}</td>
                     <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end">
@@ -48,6 +48,7 @@ const fetchAPI_Page = (currentPage) => {
                         <i class="bi bi-pen"></i> 
                         <i class="bi bi-trash3"></i>
                     </td>
+                    <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end"><i onclick="BtnChiTiet('${items._id}','${items.avatar}','${items.username}','${items.sex = 0 ? 'Nam' : 'Nữ'}','${items.email}','${items.phoneNumber}')" class="bi bi-eye"></i> <i class="bi bi-pen"></i> <i class="bi bi-trash3"></i></td>
                 </tr>
             `;
             }).join('');
@@ -64,10 +65,84 @@ const fetchAPI_Page = (currentPage) => {
 
 fetchAPI_Page(numberPage);
 
-const BtnChiTiet = (items) => {
+const BtnChiTiet = (_id,avatar,username,sex,email,phoneNumber) => {
     // alert(`Chức năng đang được phát triển ${name}`);
     dialog.style.display = 'flex';
-    console.log(items);
+    let html = /*html*/` 
+        <div class="bgr-dialog-chitiet-content" style="
+            width:100%;
+            height:100%;
+        ">
+            <div class="bgr-dialog-chitiet-content-title text-center">
+                <h2>THÔNG TIN NGƯỜI DÙNG</h2>
+            </div>
+            <div class="bgr-dialog-chitiet-content-body">
+                <div class="bgr-dialog-chitiet-content-body-image d-flex flex-row justify-content-center" style="
+                    width:100%;
+                    margin: 20px;
+                ">
+                    <img width="150px" height="200px" 
+                        style="
+                            object-fit: cover;
+                            align-self: center;
+                            border-radius: 10px;
+                        " src="${avatar}" alt="">
+                </div>
+                <div class="bgr-dialog-chitiet-content-body-category">
+                    <p  style="
+                        background-color: white;
+                        margin: 0;
+                        padding: 0 20px;
+                        font-weight: bold;
+                        " >ID người dùng: ${_id}
+                    </p>
+                    <div class="d-flex justify-content-between">
+                    <p  style="
+                        background-color: white;
+                        margin: 0;
+                        padding: 0px 40px;
+                        " >Tên người dùng: ${username}
+                    </p>
+                        <p  style="
+                            background-color: white;
+                            margin: 0;
+                            padding-right:100px;
+                            " >Giới tính: ${sex }
+                        </p>
+                        
+                    </div>
+                    <p  style="
+                        background-color: white;
+                        margin: 0;
+                        padding: 0px 40px;
+                        " >Email: ${email}
+                    </p>
+                    <p  style="
+                        background-color: white;
+                        margin: 0;
+                        padding: 0px 40px;
+                        " >Số điện thoại: ${phoneNumber}
+                    </p>
+                    
+                </div>
+                
+            </div>
+            
+            <div class="bgr-dialog-chitiet-content-button text-center">
+                <button style="
+                    width: 30%;
+                    height: 55px;
+                    background-color: #404E67;
+                    color: white;
+                    outline: none;
+                    border: none;
+                    border-radius: 5px;
+                    margin-top: 20px;
+                " type="button" onclick="closeDialogChiTiet()">OK</button>
+            </div>
+        </div>
+    `
+    dialogbody.innerHTML = html;
 }
 
 const closeDialogChiTiet = () => {
