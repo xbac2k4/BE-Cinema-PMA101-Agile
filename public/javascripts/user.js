@@ -3,7 +3,12 @@ const url = 'http://localhost:3000/api/v1/user'
 let tbody = document.querySelector('tbody')
 let page = document.getElementById('page')
 let preloader = document.getElementById('preloader')
+let pageNumber = document.getElementById('page-number')
+let tang = document.getElementById('ic-tang')
+let giam = document.getElementById('ic-giam')
+
 let numberPage = 1;
+let totalPages;
 
 const fetchAPI_Page = (currentPage) => {
     fetch(`${url}/get-user-by-page?page=${currentPage}&limit=5`)
@@ -38,14 +43,10 @@ const fetchAPI_Page = (currentPage) => {
             `;
             }).join('');
             // let htmlPage = data.data.totalPages;
-            let htmlPage = [...Array(data.data.totalPages).keys()].map(page => {
-                return /*html*/` 
-                <button type="button" class="btn btn-outline-secondary ${page + 1 === currentPage ? 'active' : ''}" onclick="BtnPage(${page + 1})">${page + 1}</button>
-            `;
-            })
             preloader.style.display = 'none';
             tbody.innerHTML = html;
-            page.innerHTML = htmlPage;
+            pageNumber.value = numberPage;
+            totalPages = data.data.totalPages;
         })
         .catch(error => {
             console.error('There was a itemsblem with the fetch operation:', error);
@@ -57,3 +58,18 @@ fetchAPI_Page(numberPage);
 const BtnChiTiet = () => {
     alert('Chức năng đang được phát triển');
 }
+
+tang.addEventListener('click', event => {
+    event.preventDefault();
+    if (numberPage < totalPages) {
+        numberPage++;
+        fetchAPI_Page(numberPage);
+    }
+});
+giam.addEventListener('click', event => {
+    event.preventDefault();
+    if (numberPage > 0) {
+        numberPage--;
+        fetchAPI_Page(numberPage);
+    }
+});
