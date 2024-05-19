@@ -5,5 +5,8 @@ const router = express.Router();
 
 router.get('/get-showtimes-by-page', new ShowtimesController().getShowtimesByPage);
 router.get('/get-showtimes', new ShowtimesController().getAllShowtimes);
+router.post('/add-showtimes', new ShowtimesController().addShowtimes);
+router.put('/update-showtimes/:id', new ShowtimesController().updateShowtimes);
+router.delete('/delete-showtimes/:id', new ShowtimesController().deleteShowtimes);
 
 module.exports = router;

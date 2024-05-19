@@ -22,7 +22,7 @@ const fetchAPI_Page = (currentPage) => {
         })
         .then(data => {
             // console.log("data ok: " + data.data.movies);
-            let html = data.data.showtime.map(items => {
+            let html = data.data.showtimes.map(items => {
                 console.log(items);
                 return /*html*/` 
                 <tr>

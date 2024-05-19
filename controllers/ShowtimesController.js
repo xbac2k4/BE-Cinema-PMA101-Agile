@@ -1,6 +1,7 @@
 const Room = require("../models/Room");
 const Showtimes = require("../models/Showtimes");
 const Time = require("../models/Time");
+const ShowTimesService = require("../services/ShowtimesService");
 
 class ShowTimesController {
     getAllShowtimes = async (req, res) => {
@@ -20,18 +21,64 @@ class ShowTimesController {
         const { page, limit } = req.query;
         try {
             // const data = await Category.find().populate();
-            const skip = (parseInt(page) - 1) * parseInt(limit);
-            const showtime = await Showtimes.find().populate('id_room').populate('id_time').populate('id_movie').skip(skip).limit(parseInt(limit));
-            const totalShowtimes = await Showtimes.countDocuments();
-            const totalPages = Math.ceil(totalShowtimes / parseInt(limit));
+            const data = await new ShowTimesService().getShowtimesByPage(page, limit);
             // console.log('data: ', movies);
             res.json({
-                status: 200,
-                message: "Danh sách phim",
-                data: { showtime, totalPages }
+                status: data.status,
+                message: data.message,
+                data: data.data
             })
         } catch (error) {
             console.log(error);
+        }
+    }
+    addShowtimes = async (req, res, next) => {
+        try {
+            const date = req.body.date;
+            const id_room = req.body.id_room;
+            const id_time = req.body.id_time;
+            const id_movie = req.body.id_movie;
+            const data = await new ShowTimesService().addShowtimes(date, id_room, id_time, id_movie);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ status: 500, message: "Có lỗi xảy ra" });
+        }
+    }
+    updateShowtimes = async (req, res, next) => {
+        try {
+            const { id } = req.params
+            const date = req.body.date;
+            const id_room = req.body.id_room;
+            const id_time = req.body.id_time;
+            const id_movie = req.body.id_movie;
+            const data = await new ShowTimesService().updateShowtimes(id, date, id_room, id_time, id_movie);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ status: 500, message: "Có lỗi xảy ra" });
+        }
+    }
+    deleteShowtimes = async (req, res, next) => {
+        try {
+            const { id } = req.params;
+            const data = await new ShowTimesService().deleteShowtimes(id);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ status: 500, message: "Có lỗi xảy ra" });
         }
     }
 }

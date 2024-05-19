@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Scheme = mongoose.Schema;
 
 const Category = new Scheme({
-    image: { type: String },
+    // image: { type: String },
     name: {type: String, required: true}
 }, {
     timestamps: true
