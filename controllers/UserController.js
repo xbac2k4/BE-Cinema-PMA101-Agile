@@ -64,6 +64,20 @@ class UserController {
             console.log(error);
         }
     }
+    getUserByID = async (req, res, next) => {
+        const { id } = req.params;
+        try {
+            const data = await new UserService().getUserByID(id);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+        } catch (error) {
+            console.error('Error fetching movie', error);
+            res.status(500).json({ error: 'Server error' });
+        }
+    }
     deleteUser = async (req, res) => {
         try {
             const { id } = req.params;

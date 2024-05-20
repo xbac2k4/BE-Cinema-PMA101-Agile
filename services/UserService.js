@@ -93,6 +93,18 @@ class UserService {
             console.log(error);
         }
     }
+    getUserByID = async (id) => {
+        try {
+            const user = await Users.findById(id).populate('_id');
+            return {
+                status: 200,
+                message: "Danh sách user",
+                data: user
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     deleteUser = async (id) => {
         try {
             const result = await Users.findByIdAndDelete(id);
