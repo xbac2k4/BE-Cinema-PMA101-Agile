@@ -116,7 +116,7 @@ i:hover {
     /* hoặc bất kỳ kiểu thiết lập trạng thái active nào khác */
     color: white;
 }
-.bgr-dialog-chitiet {
+.bgr-dialog {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
@@ -135,7 +135,7 @@ i:hover {
     width: 100%;
     height: 100%;
 }
-.dialog-chitiet {
+.dialog-content {
     width: 40%;
     height: auto;
     background-color: white;

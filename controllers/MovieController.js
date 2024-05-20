@@ -28,10 +28,24 @@ class MovieController {
             console.log(error);
         }
     }
+    getMovieByID = async (req, res, next) => {
+        const { id } = req.params;
+        try {
+            const data = await new MovieService().getMovieByID(id);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+        } catch (error) {
+            console.error('Error fetching movie', error);
+            res.status(500).json({ error: 'Server error' });
+        }
+    }
     addMovieWithImage = async (req, res) => {
         try {
             const file = req.file;
-            // console.log(`file: ${file}`);
+            console.log(`file: ${file}`);
             const name = req.body.name;
             const duration = req.body.duration;
             const directors = req.body.directors;

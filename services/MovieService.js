@@ -17,6 +17,18 @@ class MovieService {
             console.log(error);
         }
     }
+    getMovieByID = async (id) => {
+        try {
+            const movie = await Movie.findById(id).populate('id_category');
+            return {
+                status: 200,
+                message: "Danh sách phim",
+                data: movie
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     addMovieWithImage = async (file, name, duration, directors, urlsImage, description, id_category, end_date, start_date) => {
         try {
             if (!file || !name) {

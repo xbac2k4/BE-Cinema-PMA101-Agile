@@ -18,7 +18,7 @@
                     <input type="search" placeholder="Search..." name="" id="">
                     <i class="bi bi-search"></i>
                 </div>
-                <button onclick="alert('Chức năng đang phát triển')" type="button"><i class="bi bi-plus-circle"></i>Thêm
+                <button onclick="BtnAdd()" type="button"><i class="bi bi-plus-circle"></i>Thêm
                     phim mới</button>
             </div>
         </div>
@@ -42,9 +42,9 @@
             <input type="text" name="page-number" id="page-number">
             <i class="bi bi-caret-right-square" id="ic-tang"></i>
         </div>
-        <div class="bgr-dialog-chitiet" id="bgr-dialog-chitiet">
-            <div class="close-dialog" onclick="closeDialogChiTiet()"></div>
-            <div class="dialog-chitiet" id="dialog-chitiet" open></div>
+        <div class="bgr-dialog" id="bgr-dialog">
+            <div class="close-dialog" onclick="closeDialog()"></div>
+            <div class="dialog-content" id="dialog-content"></div>
         </div>
     </main>
     <script src="javascripts/movie.js"></script>

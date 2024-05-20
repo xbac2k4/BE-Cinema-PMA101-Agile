@@ -2,8 +2,8 @@ const url = 'http://localhost:3000/api/v1/user'
 
 let tbody = document.querySelector('tbody')
 let page = document.getElementById('page')
-let dialog = document.getElementById('bgr-dialog-chitiet')
-let dialogbody = document.getElementById('dialog-chitiet')
+let dialog = document.getElementById('bgr-dialog')
+let dialogbody = document.getElementById('dialog-content')
 let preloader = document.getElementById('preloader')
 let pageNumber = document.getElementById('page-number')
 let tang = document.getElementById('ic-tang')
