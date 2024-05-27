@@ -1,5 +1,6 @@
 const url = 'http://localhost:3000/api/v1/category'
-
+let dialog = document.getElementById('bgr-dialog')
+let dialogbody = document.getElementById('dialog-content')
 let tbody = document.querySelector('tbody')
 let page = document.getElementById('page')
 let preloader = document.getElementById('preloader')
@@ -57,7 +58,9 @@ const fetchAPI_Page = (currentPage) => {
                 <tr>
                     <td style="color: red;">${items._id}</td>
                     <td>${items.name}</td>
-                    <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end"><i onclick="BtnChiTiet()" class="bi bi-eye"></i> <i class="bi bi-pen"></i> <i class="bi bi-trash3"></i></td>
+                    <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end">
+                    <i onclick="BtnUp('${items.id}','${items.name}')" class="bi bi-pen"></i> 
+                    <i class="bi bi-trash3"></i></td>
                 </tr>
             `;
             }).join('');
@@ -116,3 +119,81 @@ giam.addEventListener('click', event => {
         fetchAPI_Page(numberPage);
     }
 });
+const BtnAdd = () => {
+    dialog.style.display = 'flex';
+
+    let html = /*html*/`
+                <div class="dialog-add w-100 h-100">
+                    <h2 class="title-dialog text-center">THÊM THỂ LOẠI</h2>
+                    <form id="form-movie" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <span class="title" id="inputGroup-sizing-default">Tên phim:</span>
+                            <input id="name-movie" type="text" class="form-control" name="name"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-primary mx-5 w-25" type="submit">Lưu</button>
+                            <button class="btn btn-outline-primary mx-5 w-25" type="button" onclick="closeDialog()">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+    dialogbody.innerHTML = html;
+    const form = document.getElementById('form-movie');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        BtnLuu(formData)
+        console.log("ddd" + formData);
+    });
+}
+const closeDialog = () => {
+    dialog.style.display = 'none';
+}
+const BtnLuu = async (formData) => {
+    try {
+        const response = await fetch(`${url}/add-category`, {
+            method: "POST",
+            body: formData
+        });
+        const result = await response.json();
+        console.log(result);
+        if (response.status === 200) {
+            alert('Thêm thành công');
+            document.getElementById('form-movie').reset();
+            dialog.style.display = 'none';
+        } else {
+            alert('Thêm thất bại');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi');
+    }
+}
+const BtnUp = (id, formData) => {
+    dialog.style.display = 'flex';
+
+    let html = /*html*/`
+    <div class="dialog-add w-100 h-100">
+        <h2 class="title-dialog text-center">SỬA THỂ LOẠI</h2>
+        <form id="form-movie" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <span class="title" id="inputGroup-sizing-default">Tên phim:</span>
+                <input id="name-movie" type="text" class="form-control" name="name"
+                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary mx-5 w-25" type="submit">Lưu</button>
+                <button class="btn btn-outline-primary mx-5 w-25" type="button" onclick="closeDialog()">Hủy</button>
+            </div>
+        </form>
+    </div>
+`;
+    dialogbody.innerHTML = html;
+    const form = document.getElementById('form-movie');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        formatAndSubmitUpdateForm(itemId, formData);
+    });
+}
