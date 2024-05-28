@@ -32,12 +32,27 @@ class ShowTimesController {
             console.log(error);
         }
     }
+    getShowtimesByID = async (req, res, next) => {
+        const { id } = req.params;
+        try {
+            const data = await new ShowTimesService().getShowtimesByID(id);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+        } catch (error) {
+            console.error('Error fetching movie', error);
+            res.status(500).json({ error: 'Server error' });
+        }
+    }
     addShowtimes = async (req, res, next) => {
         try {
             const date = req.body.date;
             const id_room = req.body.id_room;
             const id_time = req.body.id_time;
             const id_movie = req.body.id_movie;
+            // console.log('date:', req.body);
             const data = await new ShowTimesService().addShowtimes(date, id_room, id_time, id_movie);
             res.json({
                 status: data.status,

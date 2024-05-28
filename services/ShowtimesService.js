@@ -1,5 +1,6 @@
+const Room = require("../models/Room");
 const Showtimes = require("../models/Showtimes");
-
+const Time = require("../models/Time");
 class ShowTimesService {
     getShowtimesByPage = async (page, limit) => {
         try {
@@ -12,6 +13,18 @@ class ShowTimesService {
                 status: 200,
                 message: "Danh sách lịch chiếu",
                 data: {showtimes, totalPages}
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    getShowtimesByID = async (id) => {
+        try {
+            const data = await Showtimes.findById(id).populate('id_room').populate('id_time').populate('id_movie')
+            return {
+                status: 200,
+                message: "Danh sách lịch chiếu",
+                data: data
             }
         } catch (error) {
             console.log(error);

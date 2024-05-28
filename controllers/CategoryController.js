@@ -31,8 +31,8 @@ class CategoryController {
     addCategory = async (req, res) => {
         try {
             const name = req.body.name;
-            console.log(req.body);
-            console.log(`name: ${name}`);
+            // console.log(req.body);
+            // console.log(`name: ${name}`);
             const data = await new CategoryService().addCategory(name);
             res.json({
                 status: data.status,

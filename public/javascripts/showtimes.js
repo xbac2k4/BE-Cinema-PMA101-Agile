@@ -8,12 +8,13 @@ let dialogbody = document.getElementById('dialog-content')
 let pageNumber = document.getElementById('page-number')
 let tang = document.getElementById('ic-tang')
 let giam = document.getElementById('ic-giam')
+let htmlRoom;
 
 let numberPage = 1;
 let totalPages;
 
-const fetchAPI_Page = (currentPage) => {
-    fetch(`${url}/get-showtimes-by-page?page=${currentPage}&limit=5`)
+const fetchAPI_Page = async (currentPage) => {
+    await fetch(`${url}/get-showtimes-by-page?page=${currentPage}&limit=5`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -23,7 +24,7 @@ const fetchAPI_Page = (currentPage) => {
         .then(data => {
             // console.log("data ok: " + data.data.movies);
             let html = data.data.showtimes.map(items => {
-                console.log(items);
+                // console.log(items);
                 return /*html*/` 
                 <tr>
                     <td><p style="
@@ -44,8 +45,8 @@ const fetchAPI_Page = (currentPage) => {
                     </td>
                     <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end">
                         <i onclick="BtnChiTiet('${items._id}', '${items.date}', '${items.id_room.roomName}', '${items.id_time.timeName}', '${items.id_movie._id}', '${items.id_movie.name}')" class="bi bi-eye"></i> 
-                        <i class="bi bi-pen"></i> 
-                        <i class="bi bi-trash3"></i>
+                        <i onclick="BtnSua('${items._id}')" class="bi bi-pen"></i> 
+                        <i onclick="BtnXoa('${items._id}')" class="bi bi-trash3"></i>
                     </td>
                 </tr>
             `;
@@ -139,14 +140,14 @@ const BtnChiTiet = (id_showtimes, date, room, time, id_movie, movie_name) => {
                     border: none;
                     border-radius: 5px;
                     margin-top: 20px;
-                " type="button" onclick="closeDialogChiTiet()">OK</button>
+                " type="button" onclick="closeDialog()">OK</button>
             </div>
         </div>
     `
     dialogbody.innerHTML = html;
 }
 
-const closeDialogChiTiet = () => {
+const closeDialog = () => {
     dialog.style.display = 'none';
 }
 
@@ -164,3 +165,255 @@ giam.addEventListener('click', event => {
         fetchAPI_Page(numberPage);
     }
 });
+
+const BtnThem = async () => {
+    dialog.style.display = 'flex';
+
+    Promise.all([
+        await fetch(`http://localhost:3000/api/v1/room/get-room`).then(response => response.json()),
+        await fetch(`http://localhost:3000/api/v1/time/get-time`).then(response => response.json()),
+        await fetch(`http://localhost:3000/api/v1/movie/get-movie`).then(response => response.json())
+    ]).then(([roomData, timeData, movieData]) => {
+        const valueRoom = roomData.data.map(item => `<option value="${item._id}">${item.roomName}</option>`).join('');
+        const valueTime = timeData.data.map(item => `<option value="${item._id}">${item.timeName}</option>`).join('');
+        const valueMovie = movieData.data.map(item => `<option value="${item._id}">${item.name}</option>`).join('');
+
+        const Dialoghtml = `
+            <div class="dialog-add w-100 h-100">
+                <h2 class="title-dialog text-center">THÊM LỊCH CHIẾU</h2>
+                <form id="form-showtime" method="post">         
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelectRoom">Phòng chiếu</label>
+                            <select class="form-select" id="inputGroupSelectRoom" name="id_room">
+                                <option selected>Choose room...</option>
+                                ${valueRoom}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelectDate">Ngày chiếu</label>
+                            <input id="date" type="date" class="form-control" name="date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelectTime">Giờ chiếu</label>
+                            <select class="form-select" id="inputGroupSelectTime" name="id_time">
+                                <option selected>Choose time...</option>
+                                ${valueTime}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelectMovie">Phim</label>
+                            <select class="form-select" id="inputGroupSelectMovie" name="id_movie">
+                                <option selected>Choose movie...</option>
+                                ${valueMovie}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-primary mx-5 w-25" type="submit">Lưu</button>
+                        <button class="btn btn-outline-primary mx-5 w-25" type="button" onclick="closeDialog()">Hủy</button>
+                    </div>
+                </form>
+            </div>`;
+
+        dialogbody.innerHTML = Dialoghtml;
+        const form = document.getElementById('form-showtime');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            // console.log(formData.get('date')+ '\n' + formData.get('id_movie') + '\n' + formData.get('id_room') + '\n' + formData.get('id_time'));
+            formatAndSubmitForm(formData);
+        });
+    }).catch(error => {
+        console.error('Error fetching data:', error);
+    });
+};
+
+const formatAndSubmitForm = (formData) => {
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    const date = formData.get('date');
+
+    if (date) {
+        formData.set('date', formatDate(date));
+    }
+
+    BtnLuu(formData);
+};
+
+const BtnLuu = async (formData) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/v1/showtimes/add-showtimes`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded" // Set content type to x-www-form-urlencoded
+            },
+            body: new URLSearchParams(formData).toString()
+        });
+        const result = await response.json();
+        console.log(result);
+        if (response.status === 200) {
+            alert('Thêm thành công');
+            document.getElementById('form-showtime').reset();
+            dialog.style.display = 'none';
+            fetchAPI_Page(numberPage);
+        } else {
+            alert('Thêm thất bại');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi');
+    }
+};
+
+const BtnSua = (itemId) => {
+    dialog.style.display = 'flex';
+    // console.log(itemId);
+
+    // Fetch item data to populate the form
+    // console.log(`${url}/get-movie-by-id/${itemId}`);
+    fetch(`${url}/get-showtimes-by-id/${itemId}`)
+        .then(response => response.json())
+        .then(itemData => {
+            console.log(itemData);
+            Promise.all([
+                fetch(`http://localhost:3000/api/v1/room/get-room`).then(response => response.json()),
+                fetch(`http://localhost:3000/api/v1/time/get-time`).then(response => response.json()),
+                fetch(`http://localhost:3000/api/v1/movie/get-movie`).then(response => response.json())
+            ]).then(([roomData, timeData, movieData]) => {
+                const valueRoom = roomData.data.map(item => `<option value="${item._id}" ${item._id === itemData.data.id_room ? 'selected' : ''}>${item.roomName}</option>`).join('');
+                const valueTime = timeData.data.map(item => `<option value="${item._id}" ${item._id === itemData.data.id_time ? 'selected' : ''}>${item.timeName}</option>`).join('');
+                const valueMovie = movieData.data.map(item => `<option value="${item._id}" ${item._id === itemData.data.id_movie ? 'selected' : ''}>${item.name}</option>`).join('');
+
+                const Dialoghtml = `
+                    <div class="dialog-add w-100 h-100">
+                        <h2 class="title-dialog text-center">THÊM LỊCH CHIẾU</h2>
+                        <form id="form-showtime" method="post">         
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="inputGroupSelectRoom">Phòng chiếu</label>
+                                    <select class="form-select" id="inputGroupSelectRoom" name="id_room">
+                                        <option selected>Choose room...</option>
+                                        ${valueRoom}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="inputGroupSelectDate">Ngày chiếu</label>
+                                    <input id="date" value="${formatDateForInput(itemData.data.date)}" type="date" class="form-control" name="date">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="inputGroupSelectTime">Giờ chiếu</label>
+                                    <select class="form-select" id="inputGroupSelectTime" name="id_time">
+                                        <option selected>Choose time...</option>
+                                        ${valueTime}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <label class="input-group-text" for="inputGroupSelectMovie">Phim</label>
+                                    <select class="form-select" id="inputGroupSelectMovie" name="id_movie">
+                                        <option selected>Choose movie...</option>
+                                        ${valueMovie}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button class="btn btn-primary mx-5 w-25" type="submit">Lưu</button>
+                                <button class="btn btn-outline-primary mx-5 w-25" type="button" onclick="closeDialog()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>`;
+
+                dialogbody.innerHTML = Dialoghtml;
+                const form = document.getElementById('form-showtime');
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const formData = new FormData(form);
+                    // console.log(formData.get('date')+ '\n' + formData.get('id_movie') + '\n' + formData.get('id_room') + '\n' + formData.get('id_time'));
+                    formatAndSubmitUpdateForm(itemId, formData);
+                });
+            }).catch(error => {
+                console.error('Error fetching data:', error);
+            });
+        })
+        .catch(error => console.error('Error fetching item data:', error));
+}
+
+const formatDateForInput = (dateStr) => {
+    const [day, month, year] = dateStr.split('/');
+    return `${year}-${month}-${day}`;
+}
+
+const formatAndSubmitUpdateForm = (itemId, formData) => {
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    const date = formData.get('date');
+
+    if (date) {
+        formData.set('date', formatDate(date));
+    }
+
+    BtnUpdate(itemId, formData);
+}
+
+const BtnUpdate = async (itemId, formData) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/v1/showtimes/update-showtimes/${itemId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded" // Set content type to x-www-form-urlencoded
+            },
+            body: new URLSearchParams(formData).toString()
+        });
+        const result = await response.json();
+        console.log(result);
+        if (response.status === 200) {
+            alert('Sửa thành công');
+            document.getElementById('form-showtime').reset();
+            dialog.style.display = 'none';
+            fetchAPI_Page(numberPage);
+        } else {
+            alert('Sửa thất bại');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi');
+    }
+}
+
+const BtnXoa = async (itemId) => {
+    if (confirm('Bạn có muốn xóa')) {
+        const response = await fetch(`${url}/delete-showtimes/${itemId}`, { method: 'DELETE' })
+        const result = await response.json();
+        if (result.status === 200) {
+            alert(result.message);
+            fetchAPI_Page(numberPage)
+            // form.reset()
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    }
+}
