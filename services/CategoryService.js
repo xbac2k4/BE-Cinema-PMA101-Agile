@@ -19,6 +19,13 @@ class CategoryService {
     }
     addCategory = async (name) => {
         try {
+            if (name) {
+                return {
+                    status: -2,
+                    message: "Thể loại đã tồn tại",
+                    data: null
+                };
+            }
             const newCategory = new Category({
                 // image: urlsImage,
                 name: name
@@ -49,6 +56,13 @@ class CategoryService {
     updateCategory = async (id, name) => {
         try {
             const update = await Category.findById(id)
+            if (name) {
+                return {
+                    status: -2,
+                    message: "Thể loại đã tồn tại",
+                    data: null
+                };
+            }
             let result = null;
                 if (update) {
                     update.name = name ?? update.name,
@@ -63,7 +77,7 @@ class CategoryService {
                 } else { // Nếu thêm không thành công
                     return {
                         status: 400,
-                        message: "Lỗi, thêm không thành công",
+                        message: "Lỗi, cập nhật không thành công",
                         data: []
                     };
                 }
