@@ -264,13 +264,13 @@ const BtnLuu = async (formData) => {
         });
         const result = await response.json();
         console.log(result);
-        if (response.status === 200) {
-            alert('Thêm thành công');
+        if (result.status === 200) {
+            alert(result.message);
             document.getElementById('form-showtime').reset();
             dialog.style.display = 'none';
             fetchAPI_Page(numberPage);
         } else {
-            alert('Thêm thất bại');
+            alert(result.message);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -390,13 +390,13 @@ const BtnUpdate = async (itemId, formData) => {
         });
         const result = await response.json();
         console.log(result);
-        if (response.status === 200) {
-            alert('Sửa thành công');
+        if (result.status === 200) {
+            alert(result.message);
             document.getElementById('form-showtime').reset();
             dialog.style.display = 'none';
             fetchAPI_Page(numberPage);
         } else {
-            alert('Sửa thất bại');
+            alert(result.message);
         }
     } catch (error) {
         console.error('Error:', error);

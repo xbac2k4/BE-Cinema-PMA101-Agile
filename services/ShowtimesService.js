@@ -32,6 +32,26 @@ class ShowTimesService {
     }
     addShowtimes = async (date, id_room, id_time, id_movie) => {
         try {
+            const existingShowtime = await Showtimes.findOne({
+                date: date,
+                id_room: id_room,
+                id_time: id_time
+            });
+            // console.log(existingShowtime);
+            if (existingShowtime) {
+                return {
+                    status: -2,
+                    message: "Lịch chiếu đã tồn tại",
+                    data: null
+                };
+            }
+            // if (date && id_room && id_time) {
+            //     return {
+            //         status: -2,
+            //         message: "Lịch chiếu đã tồn tại",
+            //         data: null
+            //     };
+            // }
             const newShowtimes = new Showtimes({
                 date: date,
                 id_room: id_room,
