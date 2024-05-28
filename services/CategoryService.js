@@ -60,7 +60,11 @@ class CategoryService {
     updateCategory = async (id, name) => {
         try {
             const update = await Category.findById(id)
-            if (name) {
+            const existing = await Category.findOne({
+                name: name
+            });
+            // console.log(existingShowtime);
+            if (existing) {
                 return {
                     status: -2,
                     message: "Thể loại đã tồn tại",
