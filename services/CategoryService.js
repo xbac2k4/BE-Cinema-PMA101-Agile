@@ -19,7 +19,11 @@ class CategoryService {
     }
     addCategory = async (name) => {
         try {
-            if (name) {
+            const existing = await Category.findOne({
+                name: name
+            });
+            // console.log(existingShowtime);
+            if (existing) {
                 return {
                     status: -2,
                     message: "Thể loại đã tồn tại",
