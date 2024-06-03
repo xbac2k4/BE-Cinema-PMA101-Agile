@@ -170,7 +170,7 @@ const BtnChiTiet = (id_category, id_movie, image, name_category, name_movie, sta
                     border: none;
                     border-radius: 5px;
                     margin-top: 20px;
-                " type="button" onclick="closeDialogChiTiet()">OK</button>
+                " type="button" onclick="closeDialog()">OK</button>
             </div>
         </div>
     `
