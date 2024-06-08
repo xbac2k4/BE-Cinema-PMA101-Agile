@@ -33,7 +33,7 @@ class UserService {
             console.log(error);
         }
     }
-    register = async (file, username, email, password, phone, roles, urlsImage) => {
+    register = async (file, username,sex, email, password, phone, roles, urlsImage) => {
         try {
             if (!file) {
                 return {
@@ -47,6 +47,7 @@ class UserService {
             if (file) {
                 const newUser = new Users({
                     username: username,
+                    sex: sex,
                     email: email,
                     password: password,
                     phoneNumber: phone,
@@ -88,6 +89,18 @@ class UserService {
                 status: 200,
                 message: "Danh sách người dùng",
                 data: {users, totalPages}
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    getUserByID = async (id) => {
+        try {
+            const user = await Users.findById(id).populate('_id');
+            return {
+                status: 200,
+                message: "Danh sách user",
+                data: user
             }
         } catch (error) {
             console.log(error);

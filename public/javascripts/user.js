@@ -40,13 +40,13 @@ const fetchAPI_Page = (currentPage) => {
                         <img style="width:30px;height:30px,object-fit:cover" src="${items.avatar}"/>
                     </td>               
                     <td>${items.username}</td>
-                    <td>${items.sex = 0 ? 'Nam' : 'Nữ'}</td>
+                    <td>${items.sex == 0 ? 'Nam' : 'Nữ'}</td>
                     <td>${items.email}</td>
                     <td>${items.phoneNumber}</td>
                     <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end">
-                        <i onclick="BtnChiTiet('${items._id}','${items.avatar}','${items.username}','${items.sex = 0 ? 'Nam' : 'Nữ'}','${items.email}','${items.phoneNumber}')" class="bi bi-eye"></i> 
-                        <i class="bi bi-pen"></i> 
-                        <i class="bi bi-trash3"></i>
+                        <i onclick="BtnChiTiet('${items._id}','${items.avatar}','${items.username}','${items.sex == 0 ? 'Nam' : 'Nữ'}','${items.email}','${items.phoneNumber}')" class="bi bi-eye"></i> 
+                        <i onclick="BtnSua('${items._id}')" class="bi bi-pen"></i> 
+                        <i onclick="BtnXoa('${items._id}')" class="bi bi-trash3"></i>
                     </td>
                 </tr>
             `;
@@ -162,3 +162,177 @@ giam.addEventListener('click', event => {
         fetchAPI_Page(numberPage);
     }
 });
+const BtnAdd = () => {
+    dialog.style.display = 'flex';
+
+        let html = /*html*/`
+                <div class="dialog-add w-100 h-100">
+                    <h2 class="title-dialog text-center">Thêm User</h2>
+                    <form id="form-movie" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="inputGroupSelect01"> Giới tính</label>
+                                <select class="form-select" id="inputGroupSelect01" name="sex" id="sex">
+                                    <option name="sex" id="sex" selected value="0">Nam</option>
+                                    <option name="sex" id="sex" value="1">Nữ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="title" id="inputGroup-sizing-default">Tên:</span>
+                            <input id="name-movie" type="text" class="form-control" name="username"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="form-group">
+                            <span class="title" id="inputGroup-sizing-default">Hình ảnh: </span>
+                            <input type="file" class="form-control" id="image" name="image"
+                                aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <span class="title" id="inputGroup-sizing-default">Email:</span>
+                            <input id="directors" type="text" class="form-control" name="email"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="form-group">
+                            <span class="title" id="inputGroup-sizing-default">Password:</span>
+                            <input id="directors" type="text" class="form-control" name="password"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="form-group">
+                            <span class="title" id="inputGroup-sizing-default">Số điện thoại:</span>
+                            <input id="duration" type="text" class="form-control" name="phoneNumber"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-primary mx-5 w-25" type="submit">Lưu</button>
+                            <button class="btn btn-outline-primary mx-5 w-25" type="button" onclick="closeDialog()">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            dialogbody.innerHTML = html;
+            const form = document.getElementById('form-movie');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const formData = new FormData(form);
+                console.log(formData.get('sex'));
+                // formatAndSubmitForm(formData);
+                BtnLuu(formData)
+            });
+            
+}
+const BtnLuu = async (formData) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/v1/user/register`, {
+            method: "POST",
+            body: formData
+        });
+        const result = await response.json();
+        console.log(result);
+        if (response.status === 200) {
+            alert('Thêm thành công');
+            document.getElementById('form-movie').reset();
+            dialog.style.display = 'none';
+        } else {
+            alert('Thêm thất bại');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi');
+    }
+}
+const BtnSua = (itemId) => {
+    dialog.style.display = 'flex';
+    // console.log(itemId);
+
+    // Fetch item data to populate the form
+    // console.log(`${url}/get-movie-by-id/${itemId}`);
+    fetch(`${url}/get-user-by-id/${itemId}`)
+        .then(response => response.json())
+        .then(itemData => {
+            
+            let html = /*html*/`
+            <div class="dialog-add w-100 h-100">
+                <h2 class="title-dialog text-center">THÊM User</h2>
+                <form id="form-movie" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelect01"> Giới tính</label>
+                            <select class="form-select" id="inputGroupSelect01" name="sex">
+                                <option selected value="0">Nam</option>
+                                <option value="1">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="title" id="inputGroup-sizing-default">Tên:</span>
+                        <input value="${itemData.data.username}" id="name-movie" type="text" class="form-control" name="username"
+                            aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                    </div>
+                    <div class="form-group">
+                        <span class="title" id="inputGroup-sizing-default">Hình ảnh: </span>
+                        <input type="file" class="form-control" id="image" name="image"
+                            aria-describedby="inputGroupFileAddon04" aria-label="Upload" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <span class="title" id="inputGroup-sizing-default">Email:</span>
+                        <input value="${itemData.data.email}" id="directors" type="text" class="form-control" name="email"
+                            aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                    </div>
+                    <div class="form-group">
+                        <span class="title" id="inputGroup-sizing-default">Số điện thoại:</span>
+                        <input value="${itemData.data.phoneNumber}" id="duration" type="text" class="form-control" name="phoneNumber"
+                            aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-primary mx-5 w-25" type="submit">Lưu</button>
+                        <button class="btn btn-outline-primary mx-5 w-25" type="button" onclick="closeDialog()">Hủy</button>
+                    </div>
+                </form>
+            </div>
+        `;
+        dialogbody.innerHTML = html;
+        const form = document.getElementById('form-movie');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            // formatAndSubmitForm(formData);
+        });
+        })
+        .catch(error => console.error('Error fetching item data:', error));
+}
+const BtnUpdate = async (itemId, formData) => {
+    try {
+        const response = await fetch(`${url}/update-movie-with-image/${itemId}`, {
+            method: "PUT",
+            body: formData
+        });
+        const result = await response.json();
+        console.log(result);
+        if (response.status === 200) {
+            alert('Cập nhật thành công');
+            document.getElementById('form-movie').reset();
+            dialog.style.display = 'none';
+            fetchAPI_Page(numberPage)
+        } else {
+            alert('Cập nhật thất bại');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi');
+    }
+}
+const BtnXoa = async (itemId) => {
+    if (confirm('Bạn có muốn xóa')) {
+        const response = await fetch(`${url}/delete-user/${itemId}`, { method: 'DELETE' })
+        const result = await response.json();
+        if (result.status === 200) {
+            alert(result.message);
+            fetchAPI_Page(numberPage)
+            // form.reset()
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    }
+
+}
