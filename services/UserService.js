@@ -33,7 +33,7 @@ class UserService {
             console.log(error);
         }
     }
-    register = async (file, username, email, password, phone, roles, urlsImage) => {
+    register = async (file, username,sex, email, password, phone, roles, urlsImage) => {
         try {
             if (!file) {
                 return {
@@ -47,6 +47,7 @@ class UserService {
             if (file) {
                 const newUser = new Users({
                     username: username,
+                    sex: sex,
                     email: email,
                     password: password,
                     phoneNumber: phone,

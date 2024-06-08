@@ -22,12 +22,13 @@ class UserController {
             const file = req.file;
             // console.log(`file: ${file}`);
             const username = req.body.username;
+            const sex = req.body.sex;
             const email = req.body.email;
             const password = req.body.password;
             const phone = req.body.phoneNumber;
             const roles = req.body.role;
             const urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
-            const data = await new UserService().register(file, username, email, password, phone, roles, urlsImage);
+            const data = await new UserService().register(file, username,sex, email, password, phone, roles, urlsImage);
             res.json({
                 status: data.status,
                 message: data.message,

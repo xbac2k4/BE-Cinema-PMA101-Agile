@@ -40,11 +40,11 @@ const fetchAPI_Page = (currentPage) => {
                         <img style="width:30px;height:30px,object-fit:cover" src="${items.avatar}"/>
                     </td>               
                     <td>${items.username}</td>
-                    <td>${items.sex = 0 ? 'Nam' : 'Nữ'}</td>
+                    <td>${items.sex == 0 ? 'Nam' : 'Nữ'}</td>
                     <td>${items.email}</td>
                     <td>${items.phoneNumber}</td>
                     <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end">
-                        <i onclick="BtnChiTiet('${items._id}','${items.avatar}','${items.username}','${items.sex = 0 ? 'Nam' : 'Nữ'}','${items.email}','${items.phoneNumber}')" class="bi bi-eye"></i> 
+                        <i onclick="BtnChiTiet('${items._id}','${items.avatar}','${items.username}','${items.sex == 0 ? 'Nam' : 'Nữ'}','${items.email}','${items.phoneNumber}')" class="bi bi-eye"></i> 
                         <i onclick="BtnSua('${items._id}')" class="bi bi-pen"></i> 
                         <i onclick="BtnXoa('${items._id}')" class="bi bi-trash3"></i>
                     </td>
@@ -167,14 +167,14 @@ const BtnAdd = () => {
 
         let html = /*html*/`
                 <div class="dialog-add w-100 h-100">
-                    <h2 class="title-dialog text-center">THÊM User</h2>
+                    <h2 class="title-dialog text-center">Thêm User</h2>
                     <form id="form-movie" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <div class="input-group mb-3">
                                 <label class="input-group-text" for="inputGroupSelect01"> Giới tính</label>
-                                <select class="form-select" id="inputGroupSelect01" name="sex">
-                                    <option selected value="0">Nam</option>
-                                    <option value="1">Nữ</option>
+                                <select class="form-select" id="inputGroupSelect01" name="sex" id="sex">
+                                    <option name="sex" id="sex" selected value="0">Nam</option>
+                                    <option name="sex" id="sex" value="1">Nữ</option>
                                 </select>
                             </div>
                         </div>
@@ -194,6 +194,11 @@ const BtnAdd = () => {
                                 aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
                         </div>
                         <div class="form-group">
+                            <span class="title" id="inputGroup-sizing-default">Password:</span>
+                            <input id="directors" type="text" class="form-control" name="password"
+                                aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="form-group">
                             <span class="title" id="inputGroup-sizing-default">Số điện thoại:</span>
                             <input id="duration" type="text" class="form-control" name="phoneNumber"
                                 aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
@@ -210,6 +215,7 @@ const BtnAdd = () => {
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
                 const formData = new FormData(form);
+                console.log(formData.get('sex'));
                 // formatAndSubmitForm(formData);
                 BtnLuu(formData)
             });
