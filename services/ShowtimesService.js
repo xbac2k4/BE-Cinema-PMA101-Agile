@@ -30,6 +30,46 @@ class ShowTimesService {
             console.log(error);
         }
     }
+    getShowtimesByDate = async (date) => {
+        try {        
+            const data = await Showtimes.find({
+                date: date,
+            }).populate('id_room').populate('id_time').populate({
+                path: 'id_movie',
+                populate: {
+                    path: 'id_category',
+                    model: 'category'
+                }
+            })
+            return {
+                status: 200,
+                message: "Danh sách lịch chiếu",
+                data: data
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    getShowtimesByMovie = async (movie) => {
+        try {        
+            const data = await Showtimes.find({
+                id_movie: movie,
+            }).populate('id_room').populate('id_time').populate({
+                path: 'id_movie',
+                populate: {
+                    path: 'id_category',
+                    model: 'category'
+                }
+            })
+            return {
+                status: 200,
+                message: "Danh sách lịch chiếu",
+                data: data
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     addShowtimes = async (date, id_room, id_time, id_movie) => {
         try {
             const existingShowtime = await Showtimes.findOne({

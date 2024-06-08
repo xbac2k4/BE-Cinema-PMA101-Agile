@@ -23,6 +23,9 @@ const userRouter = require('./user/index');
 const showtimesRouter = require('./showtimes/index');
 const RoomRouter = require('./room/index');
 const TimeRouter = require('./time/index');
+const SeatRouter = require('./seat/index');
+const SeatSelectedRouter = require('./seatselected/index');
+
 const authenticateToken = require('../middlewares/auth');
 
 //
@@ -34,6 +37,10 @@ router.use("/api/v1/movie", movieRouter);
 router.use("/api/v1/showtimes", showtimesRouter);
 router.use("/api/v1/room", RoomRouter);
 router.use("/api/v1/time", TimeRouter);
+router.use("/api/v1/seat", SeatRouter);
+router.use("/api/v1/seatselected", SeatSelectedRouter);
+
+
 
 
 router.get("/", function(req, res, next) {

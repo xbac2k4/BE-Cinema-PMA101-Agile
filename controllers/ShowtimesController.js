@@ -1,6 +1,7 @@
 const Room = require("../models/Room");
 const Showtimes = require("../models/Showtimes");
 const Time = require("../models/Time");
+const Category = require("../models/Category");
 const ShowTimesService = require("../services/ShowtimesService");
 
 class ShowTimesController {
@@ -43,6 +44,50 @@ class ShowTimesController {
             })
         } catch (error) {
             console.error('Error fetching movie', error);
+            res.status(500).json({ error: 'Server error' });
+        }
+    }
+    getShowtimesByDate = async (req, res, next) => {
+        const { date } = req.query;
+        // console.log(date);
+        try {
+            const data = await new ShowTimesService().getShowtimesByDate(date);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+            console.log(
+                {
+                    status: data.status,
+                    message: data.message,
+                    data: data.data
+                }
+            );
+        } catch (error) {
+            console.error('Error fetching', error);
+            res.status(500).json({ error: 'Server error' });
+        }
+    }
+    getShowtimesByMovie = async (req, res, next) => {
+        const { id_movie } = req.query;
+        // console.log(id_movie);
+        try {
+            const data = await new ShowTimesService().getShowtimesByMovie(id_movie);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+            console.log(
+                {
+                    status: data.status,
+                    message: data.message,
+                    data: data.data
+                }
+            );
+        } catch (error) {
+            console.error('Error fetching', error);
             res.status(500).json({ error: 'Server error' });
         }
     }
