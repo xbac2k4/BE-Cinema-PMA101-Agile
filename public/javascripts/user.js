@@ -220,6 +220,7 @@ const BtnAdd = () => {
                 BtnLuu(formData)
             });
             
+        
 }
 const BtnLuu = async (formData) => {
     try {
@@ -229,12 +230,14 @@ const BtnLuu = async (formData) => {
         });
         const result = await response.json();
         console.log(result);
-        if (response.status === 200) {
+        if (result.status === 200) {
             alert('Thêm thành công');
             document.getElementById('form-movie').reset();
+            fetchAPI_Page(numberPage);
             dialog.style.display = 'none';
         } else {
             alert('Thêm thất bại');
+            console.log();
         }
     } catch (error) {
         console.error('Error:', error);
