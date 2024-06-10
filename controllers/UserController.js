@@ -27,8 +27,8 @@ class UserController {
             const password = req.body.password;
             const phone = req.body.phoneNumber;
             const roles = req.body.role;
-            const urlsImage = ""
-            if(file!=null){
+            var urlsImage = ""
+            if(file !== null){
                 urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
             }
             const data = await new UserService().register(file, username,sex, email, password, phone, roles, urlsImage);
@@ -37,6 +37,11 @@ class UserController {
                 message: data.message,
                 data: data.data
             })
+            console.log({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            });
         } catch (error) {
             console.log(error);
             res.status(500).json({ status: 500, message: "Có lỗi xảy ra" });

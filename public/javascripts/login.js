@@ -6,40 +6,29 @@ const url = `http://localhost:3000/api/v1/user`
 
 
 const loginUser = async () => {
-    const formData = new FormData(loginForm);
-    // formData.append("email", email.value);
-    // formData.append("password", password.value);
-    const data = new URLSearchParams(formData);
-    console.log([...data]);
     try {
+        const formData = new FormData(loginForm);
+        // formData.append("email", email.value);
+        // formData.append("password", password.value);
+        console.log("email: " + formData.get("email") + "\n" + "pass: " + formData.get("password"));
         const response = await fetch(`${url}/login`, {
             method: "POST",
-            body: data
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded" // Set content type to x-www-form-urlencoded
+            },
+            body: new URLSearchParams(formData).toString()
         })
-            // .then(res => {
-            //     console.log(res.status);
-            //     if (res.status === 200) {
-            //         alert('Đăng nhập thành công')
-            //         window.location.href = '/category';
-            //         form.reset()
-            //     } else {
-            //         alert('Đăng nhập không thành công')
-            //     }
-            // })
-            // .then(data => console.log(data))
-            // .catch(err => console.log(err))
         const result = await response.json();
         console.log(result);
         if (result.status === 200) {
-            alert('Đăng nhập thành công')
+            alert(result.message)
             window.location.href = '/category';
             form.reset()
         } else {
-            alert('Đăng nhập không thành công')
+            alert(result.message)
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Đã xảy ra lỗi');
     }
 };
 

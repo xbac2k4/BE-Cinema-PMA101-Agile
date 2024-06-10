@@ -40,6 +40,17 @@ class UserService {
             }
             // console.log('data: ' + data);
             // console.log('file: ' + file);
+            const existing = await Users.findOne({
+                phoneNumber: phone
+            });
+            // console.log(existingShowtime);
+            if (existing) {
+                return {
+                    status: -2,
+                    message: "Số điện thoại đã được sử dụng",
+                    data: []
+                };
+            }
 
             const newUser = new Users({
                 username: username,
