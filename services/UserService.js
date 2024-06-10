@@ -33,42 +33,38 @@ class UserService {
             console.log(error);
         }
     }
-    register = async (file, username,sex, email, password, phone, roles, urlsImage) => {
+    register = async (file, username, sex, email, password, phone, roles, urlsImage) => {
         try {
             if (!file) {
-                return {
-                    status: 400,
-                    message: "Không tìm thấy file",
-                    data: []
-                }
+                urlsImage = "default_image_url"; // Thay thế "default_image_url" bằng đường dẫn ảnh mặc định của bạn
             }
             // console.log('data: ' + data);
             // console.log('file: ' + file);
-            if (file) {
-                const newUser = new Users({
-                    username: username,
-                    sex: sex,
-                    email: email,
-                    password: password,
-                    phoneNumber: phone,
-                    roles: roles,
-                    avatar: urlsImage,
-                });
-                const result = await newUser.save();
-                if (result) {
-                    return {
-                        status: 200,
-                        message: "Thêm thành công",
-                        data: result
-                    };
-                } else {
-                    return {
-                        status: 400,
-                        message: "Lỗi, thêm không thành công",
-                        data: []
-                    };
-                }
+
+            const newUser = new Users({
+                username: username,
+                sex: sex,
+                email: email,
+                password: password,
+                phoneNumber: phone,
+                roles: roles,
+                avatar: urlsImage,
+            });
+            const result = await newUser.save();
+            if (result) {
+                return {
+                    status: 200,
+                    message: "Thêm thành công",
+                    data: result
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Lỗi, thêm không thành công",
+                    data: []
+                };
             }
+
         } catch (error) {
             console.error('Error:', error);
             return {
@@ -88,7 +84,7 @@ class UserService {
             return {
                 status: 200,
                 message: "Danh sách người dùng",
-                data: {users, totalPages}
+                data: { users, totalPages }
             }
         } catch (error) {
             console.log(error);
@@ -124,6 +120,100 @@ class UserService {
             }
         } catch (error) {
             console.log(error);
+        }
+    }
+    changePassword = async (id, newPassword) => {
+        try {
+            console.log('Received data in UserService:', id, newPassword); // Kiểm tra dữ liệu nhận được từ controller
+    
+            const user = await Users.findById(id);
+            if (!user) {
+                return {
+                    status: 404,
+                    message: 'User not found',
+                    data: []
+                };
+            }
+    
+            user.password = newPassword;
+            const result = await user.save();
+    
+            return {
+                status: 200,
+                message: 'Password changed successfully',
+                data: result
+            };
+        } catch (error) {
+            console.error('Error:', error);
+            return {
+                status: 500,
+                message: 'Internal server error',
+                data: null
+            };
+        }
+    }
+
+    updateUserInfo = async (id, name, phoneNumber) => {
+        try {
+            console.log('Received data in updateUserInfo:', id, name, phoneNumber); // Debugging log
+            const user = await Users.findById(id);
+            if (!user) {
+                return {
+                    status: 404,
+                    message: 'User not found',
+                    data: []
+                };
+            }
+
+            user.username = name || user.username;
+            user.phoneNumber = phoneNumber || user.phoneNumber;
+            const result = await user.save();
+
+            return {
+                status: 200,
+                message: 'User info updated successfully',
+                data: result
+            };
+        } catch (error) {
+            console.error('Error:', error); // Log the error
+            return {
+                status: 500,
+                message: 'Internal server error',
+                data: null
+            };
+        }
+    }
+    updateAvatar = async (id, urlsImage) => {
+        try {
+            const user = await Users.findById(id);
+            if (!user) {
+                return {
+                    status: 404,
+                    message: 'User not found',
+                    data: []
+                };
+            }
+
+            // Chỉ cập nhật avatar nếu urlsImage không null
+            if (urlsImage) {
+                user.avatar = urlsImage;
+            }
+            const result = await user.save();
+
+            return {
+                status: 200,
+                message: 'Avatar updated successfully',
+                data: result
+            };
+        } catch (error) {
+            console.error('Error:', error);
+            // Thêm dòng log để ghi lại thông tin về lỗi
+            console.error('Update avatar request failed:', error.message);
+            return {
+                status: 500,
+                message: 'Internal server error',
+                data: null
+            };
         }
     }
 }

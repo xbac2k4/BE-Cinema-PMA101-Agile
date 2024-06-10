@@ -1,5 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -43,6 +45,14 @@ app.use(session({
 // Cấu hình body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+//
+app.post('/upload-avatar', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+  // Xử lý tệp tải lên ở đây
+  res.send('Tệp đã được tải lên thành công');
+});
 //
 database.connect();
 //
