@@ -44,12 +44,12 @@ const fetchAPI_Page = (currentPage) => {
                     <td>${items.email}</td>
                     <td>${items.phoneNumber}</td>
                     <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end">
-                        <i onclick="BtnChiTiet('${items._id}','${items.avatar}','${items.username}','${items.sex == 0 ? 'Nam' : 'Nữ'}','${items.email}','${items.phoneNumber}')" class="bi bi-eye"></i> 
-                        <i onclick="BtnSua('${items._id}')" class="bi bi-pen"></i> 
+                        <i onclick="BtnChiTiet('${items._id}','${items.avatar}','${items.username}','${items.sex == 0 ? 'Nam' : 'Nữ'}','${items.email}','${items.phoneNumber}')" class="bi bi-eye"></i>
                         <i onclick="BtnXoa('${items._id}')" class="bi bi-trash3"></i>
                     </td>
                 </tr>
             `;
+            // <i onclick="BtnSua('${items._id}')" class="bi bi-pen"></i> 
             }).join('');
             // let htmlPage = data.data.totalPages;
             preloader.style.display = 'none';
@@ -137,14 +137,14 @@ const BtnChiTiet = (_id,avatar,username,sex,email,phoneNumber) => {
                     border: none;
                     border-radius: 5px;
                     margin-top: 20px;
-                " type="button" onclick="closeDialogChiTiet()">OK</button>
+                " type="button" onclick="closeDialog()">OK</button>
             </div>
         </div>
     `
     dialogbody.innerHTML = html;
 }
 
-const closeDialogChiTiet = () => {
+const closeDialog = () => {
     dialog.style.display = 'none';
 }
 

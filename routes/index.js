@@ -25,7 +25,8 @@ const RoomRouter = require('./room/index');
 const TimeRouter = require('./time/index');
 const SeatRouter = require('./seat/index');
 const SeatSelectedRouter = require('./seatselected/index');
-
+const DetailTicketRouter = require('./detailticket/index');
+const TicketRouter = require('./ticket/index');
 const authenticateToken = require('../middlewares/auth');
 
 //
@@ -39,9 +40,8 @@ router.use("/api/v1/room", RoomRouter);
 router.use("/api/v1/time", TimeRouter);
 router.use("/api/v1/seat", SeatRouter);
 router.use("/api/v1/seatselected", SeatSelectedRouter);
-
-
-
+router.use("/api/v1/detailticket", DetailTicketRouter);
+router.use("/api/v1/ticket", TicketRouter);
 
 router.get("/", function(req, res, next) {
   res.render('login', { title: 'LOGIN' })
@@ -74,6 +74,13 @@ router.get("/showtimes", function(req, res, next) {
   const content = renderPartial('showtimes');
   res.render('main', { 
       title: 'ShowTimes',
+      body: content,
+  });
+});
+router.get("/ticket", function(req, res, next) {
+  const content = renderPartial('movieticket');
+  res.render('main', { 
+      title: 'Ticket',
       body: content,
   });
 });
