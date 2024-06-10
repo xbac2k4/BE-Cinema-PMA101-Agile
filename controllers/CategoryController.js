@@ -28,12 +28,12 @@ class CategoryController {
             console.log(error);
         }
     }
-    addCategoryWithImage = async (req, res) => {
+    addCategory = async (req, res) => {
         try {
-            const file = req.file;
             const name = req.body.name;
-            const urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
-            const data = await new CategoryService().addCategoryWithImage(file, name, urlsImage);
+            // console.log(req.body);
+            // console.log(`name: ${name}`);
+            const data = await new CategoryService().addCategory(name);
             res.json({
                 status: data.status,
                 message: data.message,
@@ -44,10 +44,9 @@ class CategoryController {
             res.status(500).json({ status: 500, message: "Có lỗi xảy ra" });
         }
     }
-    updateCategoryWithImage = async (req, res) => {
+    updateCategory = async (req, res) => {
         try {
             const { id } = req.params
-            const file = req.file;
             const name = req.body.name;
             if (!name) {
                 return {
@@ -56,15 +55,8 @@ class CategoryController {
                     data: null
                 }
             }
-            if (!file) {
-                return res.json({
-                    status: -1,
-                    message: `Vui lòng chọn hình ảnh`,
-                    data: null
-                });
-            }
-            const urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
-            const data = await new CategoryService().updateCategoryWithImage( id, file, name, urlsImage);
+            
+            const data = await new CategoryService().updateCategory( id, name);
             res.json({
                 status: data.status,
                 message: data.message,

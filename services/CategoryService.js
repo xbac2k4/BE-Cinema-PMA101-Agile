@@ -17,36 +17,36 @@ class CategoryService {
             console.log(error);
         }
     }
-    addCategoryWithImage = async (file, name, urlsImage) => {
+    addCategory = async (name) => {
         try {
-            if (!file || !name) {
+            const existing = await Category.findOne({
+                name: name
+            });
+            // console.log(existingShowtime);
+            if (existing) {
+                return {
+                    status: -2,
+                    message: "Thể loại đã tồn tại",
+                    data: null
+                };
+            }
+            const newCategory = new Category({
+                // image: urlsImage,
+                name: name
+            });
+            const result = await newCategory.save();
+            if (result) {
+                return {
+                    status: 200,
+                    message: "Thêm thành công",
+                    data: result
+                };
+            } else {
                 return {
                     status: 400,
-                    message: "Không tìm thấy file",
+                    message: "Lỗi, thêm không thành công",
                     data: []
-                }
-            }
-            // console.log('data: ' + data);
-            // console.log('file: ' + file);
-            if (file) {
-                const newCategory = new Category({
-                    image: urlsImage,
-                    name: name
-                });
-                const result = await newCategory.save();
-                if (result) {
-                    return {
-                        status: 200,
-                        message: "Thêm thành công",
-                        data: result
-                    };
-                } else {
-                    return {
-                        status: 400,
-                        message: "Lỗi, thêm không thành công",
-                        data: []
-                    };
-                }
+                };
             }
         } catch (error) {
             console.error('Error:', error);
@@ -57,15 +57,24 @@ class CategoryService {
             };
         }
     }
-    updateCategoryWithImage = async (id, file, name, urlsImage) => {
+    updateCategory = async (id, name) => {
         try {
             const update = await Category.findById(id)
-            if (file) {
-                let result = null;
+            const existing = await Category.findOne({
+                name: name
+            });
+            // console.log(existingShowtime);
+            if (existing) {
+                return {
+                    status: -2,
+                    message: "Thể loại đã tồn tại",
+                    data: null
+                };
+            }
+            let result = null;
                 if (update) {
                     update.name = name ?? update.name,
-                        update.image = urlsImage ?? update.image,
-                        result = await update.save();
+                    result = await update.save();
                 }
                 if (result) { // Nếu thêm thành công
                     return {
@@ -76,11 +85,10 @@ class CategoryService {
                 } else { // Nếu thêm không thành công
                     return {
                         status: 400,
-                        message: "Lỗi, thêm không thành công",
+                        message: "Lỗi, cập nhật không thành công",
                         data: []
                     };
                 }
-            }
         } catch (error) {
             console.error('Error:', error);
             return {

@@ -29,16 +29,22 @@
                     <th>Giờ chiếu</th>
                     <th>Ngày chiếu</th>
                     <th>Phim</th>
-                    
                 </tr>
             </thead>
             <div id="preloader"></div>
             <tbody></tbody>
         </table>
         <div class="page">
-            <div id="page" class="btn-group me-2" role="group" aria-label="First group"></div>
+            <i class="bi bi-caret-left-square" id="ic-giam"></i>
+            <input type="text" name="page-number" id="page-number">
+            <i class="bi bi-caret-right-square" id="ic-tang"></i>
+        </div>
+        <div class="bgr-dialog" id="bgr-dialog">
+            <div class="close-dialog" onclick="closeDialog()"></div>
+            <div class="dialog-content" id="dialog-content"></div>
         </div>
     </main>
-    <script src="javascripts/movie.js"></script>
+    <script src="javascripts/showtimes.js"></script>
 </body>
+
 </html>
