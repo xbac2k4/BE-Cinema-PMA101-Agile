@@ -148,6 +148,58 @@ class DetailTicketService {
             };
         }
     }
+    getTicketByID = async (id) => {
+        try {
+            const data = await DetailTicket.findById(id).populate({
+                path: 'id_movie',
+                populate: {
+                    path: 'id_category',
+                    model: 'category'
+                },
+            }).populate({
+                path: 'id_seatselected',
+                populate: [
+                    {
+                        path: 'id_seat',
+                        model: 'seat',
+                        populate: {
+                            path: 'id_seatType',
+                            model: 'seattype'
+                        }
+                    },
+                    {
+                        path: 'id_showtimes',
+                        populate: [
+                            {
+                                path: 'id_room',
+                                model: 'room'
+                            },
+                            {
+                                path: 'id_time',
+                                model: 'time'
+                            },
+                            {
+                                path: 'id_movie',
+                                model: 'movie',
+                                populate: {
+                                    path: 'id_category',
+                                    model: 'category'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            })
+            // console.log('data: ', data);
+            return {
+                status: 200,
+                message: "Danh sách vé",
+                data: data
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     updateDetailTicket = async (id) => {
         try {
             const update = await DetailTicket.findById(id)

@@ -58,7 +58,6 @@ class UserService {
                 email: email,
                 password: password,
                 phoneNumber: phone,
-                roles: roles,
                 avatar: urlsImage,
             });
             const result = await newUser.save();

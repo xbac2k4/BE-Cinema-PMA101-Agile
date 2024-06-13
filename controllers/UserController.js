@@ -26,9 +26,9 @@ class UserController {
             const email = req.body.email;
             const password = req.body.password;
             const phone = req.body.phoneNumber;
-            const roles = req.body.role;
+            const roles = req.body.roles;
             var urlsImage = ""
-            if(file !== null){
+            if(file != null){
                 urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
             }
             const data = await new UserService().register(file, username,sex, email, password, phone, roles, urlsImage);
