@@ -133,7 +133,10 @@ class UserController {
             let urlsImage = null; // Đặt mặc định là null để chỉ cập nhật khi có file mới
 
             if (file != null) {
-                urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
+                if (req.get("host") == "10.0.2.2:3000") {
+                    urlsImage = `${req.protocol}://localhost:3000/uploads/${file.filename}`;
+     
+                } else urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
             }
 
             // Gọi service để cập nhật avatar

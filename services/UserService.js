@@ -203,7 +203,6 @@ class UserService {
                     data: []
                 };
             }
-
             // Chỉ cập nhật avatar nếu urlsImage không null
             if (urlsImage) {
                 user.avatar = urlsImage;
