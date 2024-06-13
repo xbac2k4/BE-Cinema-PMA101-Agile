@@ -22,6 +22,7 @@ class TicketController {
             console.log(error);
         }
     }
+
     addTicket = async (req, res) => {
         try {
             const { date, id_user, id_detailstickets } = req.body

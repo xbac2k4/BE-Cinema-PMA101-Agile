@@ -26,9 +26,9 @@ class UserController {
             const email = req.body.email;
             const password = req.body.password;
             const phone = req.body.phoneNumber;
-            const roles = req.body.role;
-            const urlsImage = ""
-            if(file!=null){
+            const roles = req.body.roles;
+            var urlsImage = ""
+            if(file != null){
                 urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`
             }
             const data = await new UserService().register(file, username,sex, email, password, phone, roles, urlsImage);
@@ -37,6 +37,11 @@ class UserController {
                 message: data.message,
                 data: data.data
             })
+            console.log({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            });
         } catch (error) {
             console.log(error);
             res.status(500).json({ status: 500, message: "Có lỗi xảy ra" });
@@ -128,7 +133,10 @@ class UserController {
             let urlsImage = null; // Đặt mặc định là null để chỉ cập nhật khi có file mới
 
             if (file != null) {
-                urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
+                if (req.get("host") == "10.0.2.2:3000") {
+                    urlsImage = `${req.protocol}://localhost:3000/uploads/${file.filename}`;
+     
+                } else urlsImage = `${req.protocol}://${req.get("host")}/uploads/${file.filename}`;
             }
 
             // Gọi service để cập nhật avatar

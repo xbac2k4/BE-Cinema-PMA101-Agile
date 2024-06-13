@@ -70,6 +70,26 @@ class DetailTicketController {
             res.status(500).json({ status: 500, message: "Có lỗi xảy ra" }); // Trả về mã lỗi 500 nếu có lỗi
         }
     }
+    getTicketByID = async (req, res) => {
+        const { id } = req.params
+        console.log("mmmmm", id);
+        try {
+            const data = await new DetailTicketService().getTicketByID(id);
+            // console.log('data: ', data);
+            res.json({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            })
+            console.log({
+                status: data.status,
+                message: data.message,
+                data: data.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = DetailTicketController;

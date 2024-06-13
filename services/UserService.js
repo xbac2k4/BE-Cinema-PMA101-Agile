@@ -40,6 +40,17 @@ class UserService {
             }
             // console.log('data: ' + data);
             // console.log('file: ' + file);
+            const existing = await Users.findOne({
+                phoneNumber: phone
+            });
+            // console.log(existingShowtime);
+            if (existing) {
+                return {
+                    status: -2,
+                    message: "Số điện thoại đã được sử dụng",
+                    data: []
+                };
+            }
 
             const newUser = new Users({
                 username: username,
@@ -47,7 +58,6 @@ class UserService {
                 email: email,
                 password: password,
                 phoneNumber: phone,
-                roles: roles,
                 avatar: urlsImage,
             });
             const result = await newUser.save();
@@ -193,7 +203,6 @@ class UserService {
                     data: []
                 };
             }
-
             // Chỉ cập nhật avatar nếu urlsImage không null
             if (urlsImage) {
                 user.avatar = urlsImage;

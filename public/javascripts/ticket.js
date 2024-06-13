@@ -73,7 +73,7 @@ tang.addEventListener('click', event => {
 });
 giam.addEventListener('click', event => {
     event.preventDefault();
-    if (numberPage > 0) {
+    if (numberPage > 1) {
         numberPage--;
         fetchAPI_Page(numberPage);
     }
@@ -101,3 +101,73 @@ const BtnXacNhan = async (itemId) => {
         alert('Đã xảy ra lỗi');
     }
 }
+
+const search = document.getElementById('search');
+
+search.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') { // Check if Enter key is pressed
+        if (search.value) {
+            fetch(`${url}/get-ticket-by-id/${search.value}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Read the response body as JSON
+                })
+                .then(data => {
+                    let html =
+                        ` 
+                        <tr>
+                            <td>
+                                <p style="
+                                width: 50px;
+                                color: red;   
+                                white-space: nowrap; 
+                                overflow: hidden;
+                                text-overflow: ellipsis;">
+                                    ${data.data._id}
+                                </p>
+                            </td>
+                            <td>
+                                <p style="
+                                width: 70px;
+                                color: red;   
+                                white-space: nowrap; 
+                                overflow: hidden;
+                                text-overflow: ellipsis;">
+                                    ${data.data.movieName}
+                                </p>
+                            </td>
+                            <td>${data.data.date}</td>
+                            <td>${data.data.timeName} - ${data.data.roomName}</td>
+                            <td>${data.data.seatName}</td>
+                            <td>
+                                ${data.data.status === false ?
+                                    `<div style="width: 20px; height: 20px; background-color: red; border-radius: 100%;"></div>` :
+                                    `<div style="width: 20px; height: 20px; background-color: green; border-radius: 100%;"></div>`}
+                            </td>
+                            <td style="gap: 20px; font-size: 20px" class="d-flex justify-content-end">
+                                <i onclick="BtnXacNhan('${data.data._id}')" class="bi bi-trash3"></i>
+                            </td>
+                        </tr>`;
+                    preloader.style.display = 'none';
+                    tbody.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        } else {
+            // console.error('Search input is empty');
+            fetchAPI_Page(numberPage)
+        }
+    }
+});
+
+const clear = document.getElementById('clear')
+clear.addEventListener('click', () => {
+    search.value = '';
+    fetchAPI_Page(numberPage);
+});
+
+
+
