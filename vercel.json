@@ -1,5 +1,11 @@
-{
-    "version": 2,
-    "source": "/routes/((?!index).*)",
-    "destination": "/routes/index"
+{ 
+    "version": 2, 
+    "builds": [{
+        "src": "/routes/index.js",
+        "use": "@vercel/node"
+    }],
+    "routes": [{
+        "src": "/(.*)",
+        "dest": "/"  
+    }]
 }
