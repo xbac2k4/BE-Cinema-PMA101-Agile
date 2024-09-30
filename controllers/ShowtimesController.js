@@ -1,5 +1,5 @@
 const Room = require("../models/Room");
-const Showtimes = require("../models/Showtimes.js");
+const Showtimes = require("../models/Showtimes");
 const Time = require("../models/Time");
 const Category = require("../models/Category");
 const ShowTimesService = require("../services/ShowtimesService");
